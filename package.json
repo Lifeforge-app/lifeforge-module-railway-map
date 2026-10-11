@@ -3,7 +3,7 @@
   "displayName": "Railway Map",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lifeforge-app/lifeforge-module-railwayMap.git"
+    "url": "https://github.com/Lifeforge-app/lifeforge-module-railway-map.git"
   },
   "version": "0.0.1",
   "type": "module",
