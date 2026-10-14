@@ -32,8 +32,10 @@ function validateCoords(
   }
 
   const cross = (o: number, a: number, b: number) =>
-    (coords[a].x - coords[o].x) * (coords[b].y - coords[o].y) -
-    (coords[a].y - coords[o].y) * (coords[b].x - coords[o].x)
+    ((coords[a]?.x ?? 0) - (coords[o]?.x ?? 0)) *
+      ((coords[b]?.y ?? 0) - (coords[o]?.y ?? 0)) -
+    ((coords[a]?.y ?? 0) - (coords[o]?.y ?? 0)) *
+      ((coords[b]?.x ?? 0) - (coords[o]?.x ?? 0))
 
   const signs = [cross(0, 1, 2), cross(1, 2, 3), cross(2, 3, 0), cross(3, 0, 1)]
   const pos = signs.every(s => s > 0)
@@ -44,14 +46,14 @@ function validateCoords(
   }
 
   const area = Math.abs(
-    (coords[0].x * coords[1].y -
-      coords[1].x * coords[0].y +
-      coords[1].x * coords[2].y -
-      coords[2].x * coords[1].y +
-      coords[2].x * coords[3].y -
-      coords[3].x * coords[2].y +
-      coords[3].x * coords[0].y -
-      coords[0].x * coords[3].y) /
+    ((coords[0]?.x ?? 0) * (coords[1]?.y ?? 0) -
+      (coords[1]?.x ?? 0) * (coords[0]?.y ?? 0) +
+      (coords[1]?.x ?? 0) * (coords[2]?.y ?? 0) -
+      (coords[2]?.x ?? 0) * (coords[1]?.y ?? 0) +
+      (coords[2]?.x ?? 0) * (coords[3]?.y ?? 0) -
+      (coords[3]?.x ?? 0) * (coords[2]?.y ?? 0) +
+      (coords[3]?.x ?? 0) * (coords[0]?.y ?? 0) -
+      (coords[0]?.x ?? 0) * (coords[3]?.y ?? 0)) /
       2
   )
 
@@ -218,6 +220,10 @@ export const upload = forge
         })
         .returning()
 
+      if (!record) {
+        return response.badRequest('Failed to create station sign')
+      }
+
       return response.created(record)
     }
   )
@@ -299,6 +305,10 @@ export const update = forge
         })
         .where(eq(stationSigns.id, id))
         .returning()
+
+      if (!record) {
+        return response.notFound()
+      }
 
       return response.created(record)
     }

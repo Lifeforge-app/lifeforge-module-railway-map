@@ -106,6 +106,10 @@ export const create = forge
         .values({ name, country, lines, stations })
         .returning()
 
+      if (!created) {
+        return response.badRequest('Failed to create railway map')
+      }
+
       return response.created(created)
     }
   )
@@ -139,6 +143,10 @@ export const update = forge
         .set({ stations, updated: new Date() })
         .where(eq(railwayMaps.id, id))
         .returning()
+
+      if (!updated) {
+        return response.notFound()
+      }
 
       return response.ok(updated)
     }
